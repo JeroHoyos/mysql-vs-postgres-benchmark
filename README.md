@@ -1,25 +1,34 @@
-# Trabajo final BD1
+# MySQL vs PostgreSQL
 
-Base de datos de pokémon en MySQL y PostgreSQL.
+> Comparativa de rendimiento MySQL vs. PostgreSQL en operaciones de inserción y consulta, usando pandas como referencia en memoria.
 
-## Carpetas
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat&logo=postgresql&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 
-- `mysql/` — esquema y consultas para MySQL
-- `postgreSQL/` — esquema y consultas para PostgreSQL
-- `carga_de_datos/` — datos de prueba (1k, 10k y 100k filas)
-- `python/` — las mismas consultas resueltas con pandas
+---
 
-## Tablas
+## Esquema
 
-- `especie` — especies de pokémon y sus estadísticas
-- `entrenador` — entrenadores
-- `tipo_de_objeto` — objetos que puede llevar un pokémon
-- `pokemon` — pokémon concretos de cada entrenador
+![esquema entidad-relación](docs/imgs/esquema.png)
 
-## Uso
 
-1. Crear las tablas con el `esquemas.txt` del motor que se use.
-2. Cargar los datos de `carga_de_datos/` (se generan con `generar.py`, no están versionados).
-3. Ejecutar las consultas de `consultas.txt` y medir los tiempos.
-4. Ejecutar `python/consultas.py` para compararlos con pandas.
-"# mysql-vs-postgres-benchmark" 
+## Fases
+
+| Fase | Qué se mide |
+| ---- | ----------- |
+| I | Implementación de los esquemas en ambos motores |
+| II | Carga de datos con 1k, 10k y 100k filas por tabla |
+| III | Dos consultas en SQL sobre cada carga |
+| IV | Las mismas dos consultas resueltas con pandas |
+
+
+## Estructura
+
+```
+├── docs/            # Informe en LaTeX y figuras
+├── postgreSQL/      # Esquema, consultas, cargas y la versión en pandas
+├── mysql/           # Pendiente
+└── generar.py       # Generador de los datos sintéticos
+```
+
