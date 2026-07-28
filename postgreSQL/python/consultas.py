@@ -45,7 +45,7 @@ def consulta_2(tablas):
 def cronometrar(funcion, argumento):
     inicio = time.perf_counter()
     resultado = funcion(argumento)
-    return resultado, time.perf_counter() - inicio
+    return resultado, (time.perf_counter() - inicio) * 1000
 
 
 medidas = []
@@ -62,9 +62,9 @@ for sgbd, plantilla in CONEXIONES.items():
         medidas.append([sgbd, nombre_base, "consulta 1", tiempo_1, len(resultado_1)])
         medidas.append([sgbd, nombre_base, "consulta 2", tiempo_2, len(resultado_2)])
 
-        print(f"{sgbd} {nombre_base}: traer {tiempo_traida:.3f}s, "
-              f"consulta 1 {tiempo_1:.3f}s, consulta 2 {tiempo_2:.3f}s")
+        print(f"{sgbd} {nombre_base}: traer {tiempo_traida:.3f} ms, "
+              f"consulta 1 {tiempo_1:.3f} ms, consulta 2 {tiempo_2:.3f} ms")
 
-tiempos = pd.DataFrame(medidas, columns=["sgbd", "carga", "paso", "segundos", "filas"])
+tiempos = pd.DataFrame(medidas, columns=["sgbd", "carga", "paso", "milisegundos", "filas"])
 tiempos.to_csv(os.path.join(BASE, "tiempos.csv"), index=False)
 print(tiempos)
