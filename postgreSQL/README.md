@@ -13,32 +13,32 @@ Cada archivo de carga crea las tablas y las carga, así que no hace falta correr
 
 | Prueba | Filas por tabla | Tiempo |
 |---|---|---|
-| Carga 1 | 1.000 | 107.232 ms |
-| Carga 2 | 10.000 | 1030.287 ms |
-| Carga 3 | 100.000 | 11282.137 ms |
+| Carga 1 | 1.000 | 239.662 ms |
+| Carga 2 | 10.000 | 2527.523 ms |
+| Carga 3 | 100.000 | 29055.644 ms |
 
 ## Fase III: consultas
 
 | Consulta | 1k | 10k | 100k |
 |---|---|---|---|
-| Consulta 1 | 0.779 ms | 3.653 ms | 23.050 ms |
-| Consulta 2 | 2.204 ms | 16.763 ms | 380.123 ms |
+| Consulta 1 | 2.584 ms | 7.187 ms | 51.956 ms |
+| Consulta 2 | 8.585 ms | 85.430 ms | 1128.943 ms |
 
 ## Fase IV: consultas en Python
 
 
 | Paso | 1k | 10k | 100k |
 |---|---|---|---|
-| Traer tablas | 155.098 ms | 93.729 ms | 834.794 ms |
-| Consulta 1 | 3.694 ms | 6.304 ms | 45.886 ms |
-| Consulta 2 | 3.593 ms | 13.325 ms | 149.844 ms |
+| Traer tablas | 102.735 ms | 157.031 ms | 1290.734 ms |
+| Consulta 1 | 5.231 ms | 8.992 ms | 97.092 ms |
+| Consulta 2 | 5.361 ms | 18.298 ms | 223.609 ms |
 
 | Consulta | Carga | PostgreSQL | Python |
 |---|---|---|---|
-| Consulta 1 | 1k | 0.779 ms | 3.694 ms |
-| Consulta 1 | 10k | 3.653 ms | 6.304 ms |
-| Consulta 1 | 100k | 23.050 ms | 45.886 ms |
-| Consulta 2 | 1k | 2.204 ms | 3.593 ms |
-| Consulta 2 | 10k | 16.763 ms | 13.325 ms |
-| Consulta 2 | 100k | 380.123 ms | 149.844 ms |
+| Consulta 1 | 1k | 2.584 ms | 5.231 ms |
+| Consulta 1 | 10k | 7.187 ms | 8.992 ms |
+| Consulta 1 | 100k | 51.956 ms | 97.092 ms |
+| Consulta 2 | 1k | 8.585 ms | 5.361 ms |
+| Consulta 2 | 10k | 85.430 ms | 18.298 ms |
+| Consulta 2 | 100k | 1128.943 ms | 223.609 ms |
 
