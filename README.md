@@ -23,12 +23,23 @@
 | IV | Las mismas dos consultas resueltas con pandas |
 
 
+## Resultados
+
+![Consulta 1: PostgreSQL contra MySQL](docs/imgs/motores_consulta_1.png)
+
+![Consulta 2: PostgreSQL contra MySQL](docs/imgs/motores_consulta_2.png)
+
+PostgreSQL gana las seis medidas de consulta y carga entre 3,5 y 4,3 veces más rápido. El
+detalle de cada motor está en [postgreSQL/README.md](postgreSQL/README.md) y
+[mysql/README.md](mysql/README.md), y las gráficas salen de
+[docs/analisis_benchmark.ipynb](docs/analisis_benchmark.ipynb).
+
 ## Estructura
 
 ```
-├── docs/            # Informe en LaTeX y figuras
+├── docs/            # Informe en LaTeX, notebook de análisis y figuras
 ├── postgreSQL/      # Esquema, consultas, cargas y la versión en pandas
-├── mysql/           # Pendiente
+├── mysql/           # Lo mismo para MySQL
 └── generar.py       # Generador de los datos sintéticos
 ```
 
