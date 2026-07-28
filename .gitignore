@@ -1,3 +1,5 @@
 **/carga_de_datos/carga_*.sql
 __pycache__/
 **/python/tiempos.csv
+venv/
+.venv/

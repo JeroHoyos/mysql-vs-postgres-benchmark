@@ -1,0 +1,19 @@
+-- consulta 1: pokémon de tipo fuego con su especie y su entrenador
+SELECT pokemon.mote,
+       especie.nombre_especie,
+       especie.puntos_de_velocidad,
+       entrenador.nombre_completo
+FROM pokemon
+JOIN especie ON pokemon.numero_de_pokedex = especie.numero_de_pokedex
+JOIN entrenador ON pokemon.id_entrenador = entrenador.id
+WHERE especie.tipo_principal = 'fuego';
+
+-- consulta 2: cuántos pokémon tiene cada entrenador por categoría de objeto
+SELECT entrenador.nombre_completo,
+       tipo_de_objeto.categoria,
+       COUNT(*) AS total_pokemon
+FROM pokemon
+JOIN entrenador ON pokemon.id_entrenador = entrenador.id
+JOIN tipo_de_objeto ON pokemon.nombre_objeto = tipo_de_objeto.nombre
+GROUP BY entrenador.nombre_completo, tipo_de_objeto.categoria
+ORDER BY total_pokemon DESC, entrenador.nombre_completo;
