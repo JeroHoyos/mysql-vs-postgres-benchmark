@@ -9,8 +9,8 @@ CREATE TABLE especie (
     puntos_de_defensa_esp INTEGER NOT NULL,
     puntos_de_velocidad INTEGER NOT NULL,
     tipo_principal VARCHAR(20) NOT NULL,
-    tipo_secundario VARCHAR(20), -- opcional
-    pre_evolucion INTEGER, -- opcional
+    tipo_secundario VARCHAR(20), 
+    pre_evolucion INTEGER, 
     FOREIGN KEY (pre_evolucion) REFERENCES especie (numero_de_pokedex)
 );
 
@@ -35,7 +35,7 @@ CREATE TABLE pokemon (
     fecha_de_obtencion DATE NOT NULL,
     numero_de_pokedex INTEGER NOT NULL,
     id_entrenador INTEGER NOT NULL,
-    nombre_objeto VARCHAR(50), -- opcional
+    nombre_objeto VARCHAR(50),
     FOREIGN KEY (numero_de_pokedex) REFERENCES especie (numero_de_pokedex),
     FOREIGN KEY (id_entrenador) REFERENCES entrenador (id),
     FOREIGN KEY (nombre_objeto) REFERENCES tipo_de_objeto (nombre)

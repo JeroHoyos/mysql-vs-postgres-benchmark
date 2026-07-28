@@ -1,5 +1,3 @@
--- medir tiempos: \timing on
-
 -- consulta 1: pokémon de tipo fuego con su especie y su entrenador
 SELECT pokemon.mote,
        especie.nombre_especie,

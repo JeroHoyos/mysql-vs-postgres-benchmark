@@ -9,10 +9,7 @@ TABLAS = ["especie", "entrenador", "tipo_de_objeto", "pokemon"]
 
 BASES_DE_DATOS = ["pokemon_1k", "pokemon_10k", "pokemon_100k"]
 
-CONEXIONES = {
-    "mysql": "mysql+pymysql://root:contrasena@localhost:3306/{base}",
-    "postgresql": "postgresql+psycopg2://postgres:contrasena@localhost:5432/{base}",
-}
+CONEXION = "postgresql+psycopg2://postgres:1234@localhost:5432/{base}"
 
 
 def traer_tablas(url):
@@ -50,21 +47,20 @@ def cronometrar(funcion, argumento):
 
 medidas = []
 
-for sgbd, plantilla in CONEXIONES.items():
-    for nombre_base in BASES_DE_DATOS:
-        url = plantilla.format(base=nombre_base)
-        tablas, tiempo_traida = cronometrar(traer_tablas, url)
-        resultado_1, tiempo_1 = cronometrar(consulta_1, tablas)
-        resultado_2, tiempo_2 = cronometrar(consulta_2, tablas)
+for nombre_base in BASES_DE_DATOS:
+    url = CONEXION.format(base=nombre_base)
+    tablas, tiempo_traida = cronometrar(traer_tablas, url)
+    resultado_1, tiempo_1 = cronometrar(consulta_1, tablas)
+    resultado_2, tiempo_2 = cronometrar(consulta_2, tablas)
 
-        filas_traidas = sum(len(tabla) for tabla in tablas.values())
-        medidas.append([sgbd, nombre_base, "traer tablas", tiempo_traida, filas_traidas])
-        medidas.append([sgbd, nombre_base, "consulta 1", tiempo_1, len(resultado_1)])
-        medidas.append([sgbd, nombre_base, "consulta 2", tiempo_2, len(resultado_2)])
+    filas_traidas = sum(len(tabla) for tabla in tablas.values())
+    medidas.append([nombre_base, "traer tablas", tiempo_traida, filas_traidas])
+    medidas.append([nombre_base, "consulta 1", tiempo_1, len(resultado_1)])
+    medidas.append([nombre_base, "consulta 2", tiempo_2, len(resultado_2)])
 
-        print(f"{sgbd} {nombre_base}: traer {tiempo_traida:.3f} ms, "
-              f"consulta 1 {tiempo_1:.3f} ms, consulta 2 {tiempo_2:.3f} ms")
+    print(f"{nombre_base}: traer {tiempo_traida:.3f} ms, "
+          f"consulta 1 {tiempo_1:.3f} ms, consulta 2 {tiempo_2:.3f} ms")
 
-tiempos = pd.DataFrame(medidas, columns=["sgbd", "carga", "paso", "milisegundos", "filas"])
+tiempos = pd.DataFrame(medidas, columns=["carga", "paso", "milisegundos", "filas"])
 tiempos.to_csv(os.path.join(BASE, "tiempos.csv"), index=False)
 print(tiempos)
