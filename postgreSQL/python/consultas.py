@@ -12,13 +12,14 @@ BASES_DE_DATOS = ["pokemon_1k", "pokemon_10k", "pokemon_100k"]
 CONEXION = "postgresql+psycopg2://postgres:1234@localhost:5432/{base}"
 
 
-def traer_tablas(url):
+def traer_tablas(url, tablas=TABLAS):
     with create_engine(url).connect() as conexion:
         return {tabla: pd.read_sql(f"SELECT * FROM {tabla}", conexion)
-                for tabla in TABLAS}
+                for tabla in tablas}
 
 
-def consulta_1(tablas):
+def consulta_1(url):
+    tablas = traer_tablas(url, ["pokemon", "especie", "entrenador"])
     con_especie = tablas["pokemon"].merge(tablas["especie"],
                                           on="numero_de_pokedex")
     con_entrenador = con_especie.merge(tablas["entrenador"],
@@ -28,7 +29,8 @@ def consulta_1(tablas):
                      "puntos_de_velocidad", "nombre_completo"]]
 
 
-def consulta_2(tablas):
+def consulta_2(url):
+    tablas = traer_tablas(url, ["pokemon", "entrenador", "tipo_de_objeto"])
     con_entrenador = tablas["pokemon"].merge(tablas["entrenador"],
                                              left_on="id_entrenador", right_on="id")
     con_objeto = con_entrenador.merge(tablas["tipo_de_objeto"],
@@ -50,8 +52,8 @@ medidas = []
 for nombre_base in BASES_DE_DATOS:
     url = CONEXION.format(base=nombre_base)
     tablas, tiempo_traida = cronometrar(traer_tablas, url)
-    resultado_1, tiempo_1 = cronometrar(consulta_1, tablas)
-    resultado_2, tiempo_2 = cronometrar(consulta_2, tablas)
+    resultado_1, tiempo_1 = cronometrar(consulta_1, url)
+    resultado_2, tiempo_2 = cronometrar(consulta_2, url)
 
     filas_traidas = sum(len(tabla) for tabla in tablas.values())
     medidas.append([nombre_base, "traer tablas", tiempo_traida, filas_traidas])

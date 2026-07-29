@@ -27,18 +27,21 @@ Cada archivo de carga crea las tablas y las carga, así que no hace falta correr
 ## Fase IV: consultas en Python
 
 
+Cada medición arranca en la llamada a la base: abrir la conexión, traer las
+tablas que la consulta necesita y resolverla con pandas.
+
 | Paso | 1k | 10k | 100k |
 |---|---|---|---|
-| Traer tablas | 102.735 ms | 157.031 ms | 1290.734 ms |
-| Consulta 1 | 5.231 ms | 8.992 ms | 97.092 ms |
-| Consulta 2 | 5.361 ms | 18.298 ms | 223.609 ms |
+| Traer tablas | 79.344 ms | 96.608 ms | 762.568 ms |
+| Consulta 1 | 44.226 ms | 121.534 ms | 777.474 ms |
+| Consulta 2 | 44.908 ms | 87.011 ms | 868.397 ms |
 
 | Consulta | Carga | PostgreSQL | Python |
 |---|---|---|---|
-| Consulta 1 | 1k | 2.584 ms | 5.231 ms |
-| Consulta 1 | 10k | 7.187 ms | 8.992 ms |
-| Consulta 1 | 100k | 51.956 ms | 97.092 ms |
-| Consulta 2 | 1k | 8.585 ms | 5.361 ms |
-| Consulta 2 | 10k | 85.430 ms | 18.298 ms |
-| Consulta 2 | 100k | 1128.943 ms | 223.609 ms |
+| Consulta 1 | 1k | 2.584 ms | 44.226 ms |
+| Consulta 1 | 10k | 7.187 ms | 121.534 ms |
+| Consulta 1 | 100k | 51.956 ms | 777.474 ms |
+| Consulta 2 | 1k | 8.585 ms | 44.908 ms |
+| Consulta 2 | 10k | 85.430 ms | 87.011 ms |
+| Consulta 2 | 100k | 1128.943 ms | 868.397 ms |
 
