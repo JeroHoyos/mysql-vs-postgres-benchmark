@@ -16,30 +16,33 @@ Cada carga se hizo sobre su propia base de datos (`pokemon_1k`, `pokemon_10k`,
 
 | Prueba | Filas por tabla | Tiempo |
 |---|---|---|
-| Carga 1 | 1.000 | 457.290 ms |
-| Carga 2 | 10.000 | 3955.518 ms |
-| Carga 3 | 100.000 | 40036.582 ms |
+| Carga 1 | 1.000 | 404.248 ms |
+| Carga 2 | 10.000 | 3913.301 ms |
+| Carga 3 | 100.000 | 38896.834 ms |
 
 ## Fase III: consultas
 
 | Consulta | 1k | 10k | 100k |
 |---|---|---|---|
-| Consulta 1 | 1.140 ms | 8.942 ms | 88.969 ms |
-| Consulta 2 | 7.494 ms | 77.024 ms | 902.467 ms |
+| Consulta 1 | 1.248 ms | 10.371 ms | 90.512 ms |
+| Consulta 2 | 7.149 ms | 78.263 ms | 901.164 ms |
 
 ## Fase IV: consultas en Python
 
+Cada medición arranca en la llamada a la base: abrir la conexión, traer las
+tablas que la consulta necesita y resolverla con pandas.
+
 | Paso | 1k | 10k | 100k |
 |---|---|---|---|
-| Traer tablas | 247.296 ms | 388.768 ms | 3703.509 ms |
-| Consulta 1 | 25.575 ms | 10.136 ms | 100.473 ms |
-| Consulta 2 | 13.681 ms | 22.631 ms | 239.285 ms |
+| Traer tablas | 124.687 ms | 398.721 ms | 3871.870 ms |
+| Consulta 1 | 60.530 ms | 355.877 ms | 3396.875 ms |
+| Consulta 2 | 49.629 ms | 273.342 ms | 2749.970 ms |
 
 | Consulta | Carga | MySQL | Python |
 |---|---|---|---|
-| Consulta 1 | 1k | 1.140 ms | 25.575 ms |
-| Consulta 1 | 10k | 8.942 ms | 10.136 ms |
-| Consulta 1 | 100k | 88.969 ms | 100.473 ms |
-| Consulta 2 | 1k | 7.494 ms | 13.681 ms |
-| Consulta 2 | 10k | 77.024 ms | 22.631 ms |
-| Consulta 2 | 100k | 902.467 ms | 239.285 ms |
+| Consulta 1 | 1k | 1.248 ms | 60.530 ms |
+| Consulta 1 | 10k | 10.371 ms | 355.877 ms |
+| Consulta 1 | 100k | 90.512 ms | 3396.875 ms |
+| Consulta 2 | 1k | 7.149 ms | 49.629 ms |
+| Consulta 2 | 10k | 78.263 ms | 273.342 ms |
+| Consulta 2 | 100k | 901.164 ms | 2749.970 ms |
