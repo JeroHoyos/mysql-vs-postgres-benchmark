@@ -10,7 +10,7 @@
 
 ## Esquema
 
-![esquema entidad-relación](docs/imgs/esquema.png)
+![esquema entidad-relación](docs/informe/imgs/esquema.png)
 
 
 ## Fases

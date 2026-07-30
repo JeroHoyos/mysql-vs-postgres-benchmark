@@ -1,0 +1,834 @@
+\UseRawInputEncoding
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+\IfFileExists{spanish.ldf}{%
+  \usepackage[spanish,es-noshorthands,es-tabla]{babel}%
+}{%
+  \usepackage[english]{babel}%
+  \AtBeginDocument{\def\today{\number\day\ de \ifcase\month\or enero\or
+    febrero\or marzo\or abril\or mayo\or junio\or julio\or agosto\or
+    septiembre\or octubre\or noviembre\or diciembre\fi\ de \number\year}}%
+}
+
+\IfFileExists{XCharter.sty}{\usepackage{XCharter}}{\usepackage{charter}}
+\IfFileExists{inconsolata.sty}{\usepackage[scaled=0.96]{inconsolata}}{\usepackage{courier}}
+
+\usepackage[a4paper,left=2.4cm,right=2.4cm,top=2.4cm,bottom=2.5cm,headsep=14pt]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\graphicspath{{imgs/}}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{tocloft}
+\usepackage{listings}
+\usepackage{parskip}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{gris}{gray}{0.42}
+\definecolor{grisclaro}{gray}{0.72}
+
+\linespread{1.09}
+\raggedbottom
+\renewcommand{\arraystretch}{1.3}
+
+\AtBeginDocument{%
+  \renewcommand{\contentsname}{Contenido}%
+  \renewcommand{\tablename}{Tabla}%
+  \renewcommand{\figurename}{Figura}%
+  \renewcommand{\lstlistingname}{Código}%
+}
+
+\captionsetup{font=small,labelfont=bf,labelsep=period,skip=8pt}
+
+\titleformat{\section}
+  {\normalfont\large\bfseries}{\llap{\thesection\hspace{0.7em}}}{0pt}{}
+\titlespacing*{\section}{0pt}{2.3\baselineskip}{0.7\baselineskip}
+
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries}{\llap{\thesubsection\hspace{0.7em}}}{0pt}{}
+\titlespacing*{\subsection}{0pt}{1.5\baselineskip}{0.35\baselineskip}
+
+\renewcommand{\cfttoctitlefont}{\large\bfseries}
+\renewcommand{\cftsecfont}{\bfseries}
+\renewcommand{\cftsecpagefont}{\bfseries}
+\renewcommand{\cftsubsecpagefont}{\color{gris}}
+\renewcommand{\cftsecleader}{\hfill}
+\renewcommand{\cftsubsecleader}{\color{grisclaro}\cftdotfill{\cftdotsep}}
+\setlength{\cftbeforesecskip}{9pt}
+\setlength{\cftaftertoctitleskip}{14pt}
+\setlength{\cftsubsecindent}{1.6em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\headrule}{\hbox to\headwidth{\color{grisclaro}\leaders\hrule height \headrulewidth\hfill}}
+\fancyhead[L]{\footnotesize\color{gris}\textls[40]{TRABAJO FINAL}}
+\fancyhead[R]{\footnotesize\color{gris}\thepage}
+\makeatletter
+\let\ps@plain\ps@fancy
+\makeatother
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries,
+  commentstyle=\itshape\color{gris},
+  stringstyle=\itshape,
+  numbers=left,
+  numberstyle=\ttfamily\scriptsize\color{gris},
+  numbersep=12pt,
+  stepnumber=1,
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{grisclaro},
+  framesep=8pt,
+  xleftmargin=26pt,
+  framexleftmargin=18pt,
+  xrightmargin=8pt,
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  tabsize=2,
+  columns=fullflexible,
+  keepspaces=true,
+  captionpos=b,
+  aboveskip=1.4em,
+  belowskip=1.4em,
+  extendedchars=true,
+  literate=%
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
+}
+
+\newcommand{\pordefinir}{\textit{\color{gris}[por definir]}}
+\newcommand{\captura}[2]{%
+  \begingroup
+  \setlength{\fboxsep}{0pt}\setlength{\fboxrule}{0.4pt}%
+  \fcolorbox{grisclaro}{white}{%
+    \includegraphics[width=\dimexpr#1\linewidth-2\fboxrule\relax]{anexo/#2}}%
+  \endgroup}
+\newcommand{\colhead}[1]{\footnotesize\bfseries\textls[50]{\MakeUppercase{#1}}}
+\newcommand{\sep}{\hspace{0.5em}\textcolor{grisclaro}{$\cdot$}\hspace{0.5em}}
+
+\begin{document}
+
+\begin{center}
+  {\huge\bfseries Trabajo Final}
+
+  \vspace{7pt}
+
+  {\large\color{gris}Bases de Datos 1}
+
+  \vspace{16pt}
+
+  Jerónimo Hoyos Botero\sep Dylan Ramírez Blanquicet
+\end{center}
+
+\vspace{1.1cm}
+
+\tableofcontents
+\thispagestyle{empty}
+
+\newpage
+
+\section{Esquema escogido para la implementación}
+\label{sec:esquema}
+
+De las relaciones elaboradas en el trabajo anterior se seleccionaron cuatro entidades
+conectadas entre sí. Estas entidades son \textbf{Especie}, \textbf{Pokémon},
+\textbf{Entrenador} y \textbf{Tipo de Objeto}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{esquema.png}
+  \caption{Modelo entidad-relación de las cuatro entidades seleccionadas.}
+  \label{fig:diagrama-er}
+\end{figure}
+
+\section{Fase I. Implementación de esquemas}
+\label{sec:fase1}
+
+A partir del esquema entidad-relación se implementó la base de datos en MySQL y en
+PostgreSQL.
+
+\subsection{Creación de tablas en MySQL}
+
+\begin{lstlisting}[language=SQL,caption={Tabla \texttt{especie} en MySQL.},label={lst:mysql-especie}]
+CREATE TABLE especie (
+    numero_de_pokedex INT PRIMARY KEY,
+    nombre_especie VARCHAR(60) NOT NULL,
+    puntos_de_salud INT NOT NULL,
+    puntos_de_ataque INT NOT NULL,
+    puntos_de_ataque_esp INT NOT NULL,
+    puntos_de_defensa INT NOT NULL,
+    puntos_de_defensa_esp INT NOT NULL,
+    puntos_de_velocidad INT NOT NULL,
+    tipo_principal VARCHAR(20) NOT NULL,
+    tipo_secundario VARCHAR(20),
+    pre_evolucion INT,
+    FOREIGN KEY (pre_evolucion) REFERENCES especie (numero_de_pokedex)
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL,caption={Tabla \texttt{entrenador} en MySQL.},label={lst:mysql-entrenador}]
+CREATE TABLE entrenador (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_completo VARCHAR(100) NOT NULL,
+    dinero_disponible DECIMAL(10,2) NOT NULL,
+    dia_de_nacimiento DATE NOT NULL
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL,caption={Tabla \texttt{tipo\_de\_objeto} en MySQL.},label={lst:mysql-objeto}]
+CREATE TABLE tipo_de_objeto (
+    nombre VARCHAR(50) PRIMARY KEY,
+    categoria VARCHAR(50) NOT NULL
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL,caption={Tabla \texttt{pokemon} en MySQL.},label={lst:mysql-pokemon}]
+CREATE TABLE pokemon (
+    codigo INT AUTO_INCREMENT PRIMARY KEY,
+    mote VARCHAR(60) NOT NULL,
+    fecha_de_obtencion DATE NOT NULL,
+    numero_de_pokedex INT NOT NULL,
+    id_entrenador INT NOT NULL,
+    nombre_objeto VARCHAR(50),
+    FOREIGN KEY (numero_de_pokedex) REFERENCES especie (numero_de_pokedex),
+    FOREIGN KEY (id_entrenador) REFERENCES entrenador (id),
+    FOREIGN KEY (nombre_objeto) REFERENCES tipo_de_objeto (nombre)
+);
+\end{lstlisting}
+
+\subsection{Creación de tablas en PostgreSQL}
+
+\begin{lstlisting}[language=SQL,caption={Tabla \texttt{especie} en PostgreSQL.},label={lst:pg-especie}]
+CREATE TABLE especie (
+    numero_de_pokedex INTEGER PRIMARY KEY,
+    nombre_especie VARCHAR(60) NOT NULL,
+    puntos_de_salud INTEGER NOT NULL,
+    puntos_de_ataque INTEGER NOT NULL,
+    puntos_de_ataque_esp INTEGER NOT NULL,
+    puntos_de_defensa INTEGER NOT NULL,
+    puntos_de_defensa_esp INTEGER NOT NULL,
+    puntos_de_velocidad INTEGER NOT NULL,
+    tipo_principal VARCHAR(20) NOT NULL,
+    tipo_secundario VARCHAR(20),
+    pre_evolucion INTEGER,
+    FOREIGN KEY (pre_evolucion) REFERENCES especie (numero_de_pokedex)
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL,caption={Tabla \texttt{entrenador} en PostgreSQL.},label={lst:pg-entrenador}]
+CREATE TABLE entrenador (
+    id SERIAL PRIMARY KEY,
+    nombre_completo VARCHAR(100) NOT NULL,
+    dinero_disponible NUMERIC(10,2) NOT NULL,
+    dia_de_nacimiento DATE NOT NULL
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL,caption={Tabla \texttt{tipo\_de\_objeto} en PostgreSQL.},label={lst:pg-objeto}]
+CREATE TABLE tipo_de_objeto (
+    nombre VARCHAR(50) PRIMARY KEY,
+    categoria VARCHAR(50) NOT NULL
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL,caption={Tabla \texttt{pokemon} en PostgreSQL.},label={lst:pg-pokemon}]
+CREATE TABLE pokemon (
+    codigo SERIAL PRIMARY KEY,
+    mote VARCHAR(60) NOT NULL,
+    fecha_de_obtencion DATE NOT NULL,
+    numero_de_pokedex INTEGER NOT NULL,
+    id_entrenador INTEGER NOT NULL,
+    nombre_objeto VARCHAR(50),
+    FOREIGN KEY (numero_de_pokedex) REFERENCES especie (numero_de_pokedex),
+    FOREIGN KEY (id_entrenador) REFERENCES entrenador (id),
+    FOREIGN KEY (nombre_objeto) REFERENCES tipo_de_objeto (nombre)
+);
+\end{lstlisting}
+
+\subsection{Diseño de los experimentos}
+
+Todas las mediciones de tiempo reportadas en este trabajo se realizaron sobre un mismo
+equipo, de modo que los resultados fueran comparables entre sí.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{@{}ll@{}}
+    \toprule
+    \colhead{Componente} & \colhead{Especificación} \\
+    \midrule
+    \addlinespace[2pt]
+    Procesador & Intel Core i5 de 4 núcleos \\
+    Gráficos   & Intel Iris Plus Graphics 655 \\
+    Memoria    & 8 GB LPDDR3\\
+    \addlinespace[2pt]
+    \bottomrule
+  \end{tabular}
+  \caption{Características del equipo empleado en los experimentos.}
+  \label{tab:hardware}
+\end{table}
+
+\section{Fase II. Carga de datos}
+\label{sec:fase2}
+
+\subsection{Código de población}
+
+Los datos se generaron con un script de Python. Para cada tamaño de carga el script
+crea un archivo .sql que inserta n filas y registra el tiempo de ejecución.
+
+A continuación se muestra el bloque de carga de cada motor, donde los puntos
+suspensivos representan las n filas que se repiten en cada tabla.
+
+\begin{lstlisting}[language=SQL,caption={Bloque de carga para MySQL.},label={lst:poblacion-mysql}]
+SET @inicio = NOW(6);
+START TRANSACTION;
+    INSERT INTO especie (numero_de_pokedex, nombre_especie, puntos_de_salud, puntos_de_ataque, puntos_de_ataque_esp, puntos_de_defensa, puntos_de_defensa_esp, puntos_de_velocidad, tipo_principal, tipo_secundario, pre_evolucion) VALUES (1, 'especie_1', 118, 74, 132, 96, 51, 160, 'fuego', 'agua', NULL);
+    ...
+    INSERT INTO entrenador (id, nombre_completo, dinero_disponible, dia_de_nacimiento) VALUES (1, 'entrenador_1', '523847.19', '2011-04-23');
+    ...
+    INSERT INTO tipo_de_objeto (nombre, categoria) VALUES ('objeto_1', 'pocion');
+    ...
+    INSERT INTO pokemon (codigo, mote, fecha_de_obtencion, numero_de_pokedex, id_entrenador, nombre_objeto) VALUES (1, 'mote_1', '2015-08-12', 5, 3, 'objeto_7');
+    ...
+COMMIT;
+SELECT TIMEDIFF(NOW(6), @inicio) AS tiempo_total_de_la_carga;
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL,caption={Bloque de carga para PostgreSQL.},label={lst:poblacion-pg}]
+DO $$
+DECLARE
+    inicio TIMESTAMP := clock_timestamp();
+BEGIN
+    INSERT INTO especie (numero_de_pokedex, nombre_especie, puntos_de_salud, puntos_de_ataque, puntos_de_ataque_esp, puntos_de_defensa, puntos_de_defensa_esp, puntos_de_velocidad, tipo_principal, tipo_secundario, pre_evolucion) VALUES (1, 'especie_1', 118, 74, 132, 96, 51, 160, 'fuego', 'agua', NULL);
+    ...
+    INSERT INTO entrenador (id, nombre_completo, dinero_disponible, dia_de_nacimiento) VALUES (1, 'entrenador_1', '523847.19', '2011-04-23');
+    ...
+    INSERT INTO tipo_de_objeto (nombre, categoria) VALUES ('objeto_1', 'pocion');
+    ...
+    INSERT INTO pokemon (codigo, mote, fecha_de_obtencion, numero_de_pokedex, id_entrenador, nombre_objeto) VALUES (1, 'mote_1', '2015-08-12', 5, 3, 'objeto_7');
+    ...
+    RAISE NOTICE 'Tiempo total de la carga: %', clock_timestamp() - inicio;
+END $$;
+\end{lstlisting}
+
+\subsection{Tiempos de inserción}
+
+Se realizaron tres pruebas de inserción en cada SGBD, con 1.000, 10.000 y 100.000
+filas por tabla, y se midió el tiempo empleado en cada caso.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{@{}l r@{\hskip 2.2em} r@{}}
+    \toprule
+    \colhead{Prueba de carga} & \colhead{MySQL} & \colhead{PostgreSQL} \\
+    \midrule
+    \addlinespace[2pt]
+    1.000 filas   & 0{,}370492 & 0{,}226006 \\
+    10.000 filas  & 3{,}596290 & 2{,}252994 \\
+    100.000 filas & 35{,}933864 & 25{,}74875 \\
+    \addlinespace[2pt]
+    \bottomrule
+  \end{tabular}
+  \caption{Tiempo de inserción por prueba de carga, en segundos.}
+  \label{tab:insercion}
+\end{table}
+
+En el siguiente gráfico se aprecia la comparación de estos tiempos entre ambos motores.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.92\linewidth]{insercion.png}
+  \caption{Tiempo de inserción por tamaño de carga en ambos motores.}
+  \label{fig:insercion}
+\end{figure}
+
+En las tres pruebas de inserción el motor PostgreSQL resultó significativamente más
+rápido, entre 1{,}4 y 1{,}6 veces por encima de MySQL, y la ventaja se mantuvo en
+todos los tamaños de carga.
+
+\section{Fase III. Consultas en SQL}
+\label{sec:fase3}
+
+Las dos consultas son idénticas en MySQL y en PostgreSQL, por lo que se muestra una
+sola versión de cada una.
+
+\subsection{Consulta 1}
+
+Devuelve los pokémon cuyo tipo principal es fuego, junto con el nombre y la
+velocidad de su especie y el nombre del entrenador que los posee. Para ello combina
+las tablas pokemon, especie y entrenador mediante JOIN.
+
+\begin{lstlisting}[language=SQL,caption={Consulta 1.},label={lst:consulta1}]
+SELECT pokemon.mote,
+       especie.nombre_especie,
+       especie.puntos_de_velocidad,
+       entrenador.nombre_completo
+FROM pokemon
+JOIN especie ON pokemon.numero_de_pokedex = especie.numero_de_pokedex
+JOIN entrenador ON pokemon.id_entrenador = entrenador.id
+WHERE especie.tipo_principal = 'fuego';
+\end{lstlisting}
+
+En la siguiente tabla se muestran las primeras cinco filas del resultado.
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabular}{@{}llrl@{}}
+    \toprule
+    \colhead{mote} & \colhead{nombre\_especie} & \colhead{puntos\_de\_velocidad} & \colhead{nombre\_completo} \\
+    \midrule
+    \texttt{mote\_39} & \texttt{especie\_73737} & 147 & \texttt{entrenador\_90283} \\
+    \texttt{mote\_65} & \texttt{especie\_68064} & 107 & \texttt{entrenador\_1986}  \\
+    \texttt{mote\_70} & \texttt{especie\_35863} & 39  & \texttt{entrenador\_68181} \\
+    \texttt{mote\_71} & \texttt{especie\_69590} & 88  & \texttt{entrenador\_27336} \\
+    \texttt{mote\_78} & \texttt{especie\_81380} & 54  & \texttt{entrenador\_61988} \\
+    \bottomrule
+  \end{tabular}
+  \caption{Primeras cinco filas de la consulta 1 sobre la carga de 100.000 filas.}
+  \label{tab:consulta1-muestra}
+\end{table}
+
+En el siguiente gráfico se presentan los tiempos de la consulta.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\linewidth]{motores_consulta_1.png}
+  \caption{PostgreSQL contra MySQL en la Consulta 1.}
+  \label{fig:motores_consulta_1}
+\end{figure}
+
+En la primera carga MySQL fue superior, con 1{,}12 ms contra 2{,}93 ms, pero en la
+segunda y en la tercera PostgreSQL remontó. En la última la diferencia a su favor
+resultó más evidente, 52{,}8 ms contra 120 ms, es decir, más del doble de rapidez.
+
+\subsection{Consulta 2}
+
+Cuenta cuántos pokémon tiene cada entrenador según la categoría del objeto que llevan
+equipado. Agrupa por entrenador y categoría, y ordena el resultado de mayor a menor
+cantidad, resolviendo los empates por el nombre del entrenador.
+
+\begin{lstlisting}[language=SQL,caption={Consulta 2.},label={lst:consulta2}]
+SELECT entrenador.nombre_completo,
+       tipo_de_objeto.categoria,
+       COUNT(*) AS total_pokemon
+FROM pokemon
+JOIN entrenador ON pokemon.id_entrenador = entrenador.id
+JOIN tipo_de_objeto ON pokemon.nombre_objeto = tipo_de_objeto.nombre
+GROUP BY entrenador.nombre_completo, tipo_de_objeto.categoria
+ORDER BY total_pokemon DESC, entrenador.nombre_completo;
+\end{lstlisting}
+
+En la siguiente tabla se muestran las primeras cinco filas del resultado.
+
+\begin{table}[H]
+  \centering
+  \small
+  \begin{tabular}{@{}llr@{}}
+    \toprule
+    \colhead{nombre\_completo} & \colhead{categoria} & \colhead{total\_pokemon} \\
+    \midrule
+    \texttt{entrenador\_66533} & \texttt{piedra} & 4 \\
+    \texttt{entrenador\_11979} & \texttt{llave}  & 3 \\
+    \texttt{entrenador\_12463} & \texttt{pocion} & 3 \\
+    \texttt{entrenador\_12501} & \texttt{tesoro} & 3 \\
+    \texttt{entrenador\_13494} & \texttt{tesoro} & 3 \\
+    \bottomrule
+  \end{tabular}
+  \caption{Primeras cinco filas de la consulta 2 sobre la carga de 100.000 filas.}
+  \label{tab:consulta2-muestra}
+\end{table}
+
+En el siguiente gráfico se muestra una comparación de los tiempos de la consulta.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.85\linewidth]{motores_consulta_2.png}
+  \caption{PostgreSQL contra MySQL en la Consulta 2.}
+  \label{fig:motores_consulta_2}
+\end{figure}
+
+Aquí los dos motores quedaron mucho más parejos que en la consulta anterior. MySQL fue
+más rápido con 1.000 filas, 7{,}28 ms contra 8{,}39 ms, y también con 100.000 filas,
+donde marcó 1044 ms contra 1058 ms, apenas un 1{,}4\% de diferencia. Con 10.000 filas,
+en cambio, el más rápido fue PostgreSQL, con 82{,}3 ms contra 101 ms. No se encontró una clara ventaja entre motores.
+
+\section{Fase IV. Ejecución de las consultas en Python}
+\label{sec:fase4}
+
+Desde Python se abre una conexión propia con el SGBD, se traen mediante
+\textbf{SELECT * FROM tabla} únicamente las tablas necesarias y se combinan los datos
+con código propio donde el cronómetro cubre todo ese recorrido.
+
+\subsection{Conexión y medición de tiempos}
+
+El código de conectividad y de medición es idéntico para MySQL y PostgreSQL. Lo único
+que cambia entre ambos es la cadena de conexión.
+
+\begin{lstlisting}[language=Python,caption={Comparación de las conexiones entre los SGBD.},label={lst:conexion-cambia}]
+# MySQL
+CONEXION = "mysql+pymysql://root:@localhost:3306/{base}"
+# PostgreSQL
+CONEXION = "postgresql+psycopg2://postgres:1234@localhost:5432/{base}"
+\end{lstlisting}
+
+El resto del código es común a ambos motores. Las funciones \texttt{consulta\_1} y
+\texttt{consulta\_2} se muestran en la subsección siguiente.
+
+\begin{lstlisting}[language=Python,caption={Conectividad y medición de tiempos, común a ambos motores.},label={lst:conexion}]
+import os
+import time
+import pandas as pd
+from sqlalchemy import create_engine
+
+BASE = os.path.dirname(os.path.abspath(__file__))
+TABLAS = ["especie", "entrenador", "tipo_de_objeto", "pokemon"]
+BASES_DE_DATOS = ["pokemon_1k", "pokemon_10k", "pokemon_100k"]
+CONEXION = "Depende del motor"
+
+def traer_tablas(url, tablas=TABLAS):
+    with create_engine(url).connect() as conexion:
+        return {tabla: pd.read_sql(f"SELECT * FROM {tabla}", conexion)
+                for tabla in tablas}
+
+
+def cronometrar(funcion, argumento):
+    inicio = time.perf_counter()
+    resultado = funcion(argumento)
+    return resultado, (time.perf_counter() - inicio) * 1000
+
+
+medidas = []
+
+for nombre_base in BASES_DE_DATOS:
+    url = CONEXION.format(base=nombre_base)
+    tablas, tiempo_traida = cronometrar(traer_tablas, url)
+    resultado_1, tiempo_1 = cronometrar(consulta_1, url)
+    resultado_2, tiempo_2 = cronometrar(consulta_2, url)
+
+    filas_traidas = sum(len(tabla) for tabla in tablas.values())
+    medidas.append([nombre_base, "traer tablas", tiempo_traida, filas_traidas])
+    medidas.append([nombre_base, "consulta 1", tiempo_1, len(resultado_1)])
+    medidas.append([nombre_base, "consulta 2", tiempo_2, len(resultado_2)])
+
+tiempos = pd.DataFrame(medidas,
+                       columns=["carga", "paso", "milisegundos", "filas"])
+tiempos.to_csv(os.path.join(BASE, "tiempos.csv"), index=False)
+\end{lstlisting}
+
+\subsection{Solución de las consultas en Python}
+
+Para las consultas en Python se empleó pandas, una de las librerías más usadas en
+ciencia de datos para el procesamiento de información.
+
+\begin{lstlisting}[language=Python,caption={Resolución de las consultas en Python.},label={lst:pyconsultas}]
+def consulta_1(url):
+    tablas = traer_tablas(url, ["pokemon", "especie", "entrenador"])
+    con_especie = tablas["pokemon"].merge(tablas["especie"],
+                                          on="numero_de_pokedex")
+    con_entrenador = con_especie.merge(tablas["entrenador"],
+                                       left_on="id_entrenador", right_on="id")
+    de_fuego = con_entrenador[con_entrenador["tipo_principal"] == "fuego"]
+    return de_fuego[["mote", "nombre_especie",
+                     "puntos_de_velocidad", "nombre_completo"]]
+
+
+def consulta_2(url):
+    tablas = traer_tablas(url, ["pokemon", "entrenador", "tipo_de_objeto"])
+    con_entrenador = tablas["pokemon"].merge(tablas["entrenador"],
+                                             left_on="id_entrenador", right_on="id")
+    con_objeto = con_entrenador.merge(tablas["tipo_de_objeto"],
+                                      left_on="nombre_objeto", right_on="nombre")
+    conteo = con_objeto.groupby(["nombre_completo", "categoria"]).size()
+    conteo = conteo.reset_index(name="total_pokemon")
+    return conteo.sort_values(["total_pokemon", "nombre_completo"],
+                              ascending=[False, True])
+\end{lstlisting}
+
+\subsection{SQL contra Python}
+
+En las siguientes gráficas se compara, para la consulta 1, el tiempo de MySQL frente
+al de la librería pandas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{consulta_1_mysql_vs_python.png}
+  \caption{Consulta 1, MySQL frente a Python.}
+  \label{fig:consulta1-mysql-python}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{consulta_1_postgresql_vs_python.png}
+  \caption{Consulta 1, PostgreSQL frente a Python.}
+  \label{fig:consulta1-postgresql-python}
+\end{figure}
+
+En estas dos comparaciones los gestores de bases de datos superaron a la librería
+especializada de Python por un amplio margen.
+
+En las siguientes gráficas se repite la comparación anterior, ahora con la consulta 2.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{consulta_2_mysql_vs_python.png}
+  \caption{Consulta 2, MySQL frente a Python.}
+  \label{fig:consulta2-mysql-python}
+\end{figure}
+
+En el caso de MySQL se mantuvo la superioridad, aunque con una diferencia menor que en
+la consulta 1.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{consulta_2_postgresql_vs_python.png}
+  \caption{Consulta 2, PostgreSQL frente a Python.}
+  \label{fig:consulta2-postgresql-python}
+\end{figure}
+
+A PostgreSQL, en cambio, le costó bastante más. Conservó la ventaja en las dos primeras
+cargas, con 8{,}39 ms contra 27{,}4 ms y con 82{,}3 ms contra 108 ms, pero el margen se
+fue estrechando y en la carga de 100.000 filas pandas terminó por delante, 998 ms contra
+1058 ms. Es el único escenario de todo el trabajo en el que la librería de Python
+superó a un motor de bases de datos.
+
+\section{Resultados generales y conclusiones}
+\label{sec:resultados}
+
+En la siguiente tabla se muestran todos los resultados de las consultas.
+
+\begin{table}[H]
+  \centering
+  \begin{tabular}{@{}ll r@{\hskip 1.15em} r@{\hskip 1.15em} r@{\hskip 1.15em} r@{}}
+    \toprule
+    \colhead{Consulta} & \colhead{Carga} & \colhead{MySQL} & \colhead{PostgreSQL} & \colhead{Python desde MySQL} & \colhead{Python desde Pg} \\
+    \midrule
+    \addlinespace[2pt]
+    \multirow{3}{*}{Consulta 1}
+      & 1.000   & 1{,}120   & 2{,}928  & 48{,}183   & 30{,}413   \\
+      & 10.000  & 12{,}144  & 6{,}994  & 323{,}382  & 125{,}677  \\
+      & 100.000 & 119{,}870 & 52{,}796 & 3064{,}940 & 1184{,}717 \\
+    \addlinespace[4pt]
+    \multirow{3}{*}{Consulta 2}
+      & 1.000   & 7{,}281    & 8{,}393    & 40{,}885   & 27{,}445  \\
+      & 10.000  & 100{,}983  & 82{,}338   & 247{,}794  & 108{,}340 \\
+      & 100.000 & 1043{,}776 & 1058{,}145 & 2543{,}436 & 997{,}931 \\
+    \addlinespace[2pt]
+    \bottomrule
+  \end{tabular}
+  \caption{Tiempos de respuesta de las consultas por escenario y carga, en milisegundos.}
+  \label{tab:consultas}
+\end{table}
+
+De estos resultados se concluye que en la consulta 1 el mejor escenario fue PostgreSQL,
+que ganó en las cargas de 10.000 y de 100.000 filas, y el peor la llamada de Python
+desde MySQL.
+
+En la consulta 2, en cambio, los dos motores quedaron prácticamente empatados, y el
+mejor tiempo de la carga más grande no correspondió a ninguno de ellos sino a Python
+desde PostgreSQL, con 998 ms. El peor escenario volvió a ser Python desde MySQL en las
+tres cargas.
+
+En la siguiente gráfica se muestran ambas consultas en escala logarítmica.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.85\linewidth]{consultas_sql.png}
+  \caption{Tiempo de las consultas en SQL.}
+  \label{fig:consultas-sql}
+\end{figure}
+
+Se observa que la diferencia entre motores es más marcada en la consulta 1, donde a
+partir de las 10.000 filas la curva de PostgreSQL queda claramente por debajo de la de
+MySQL, mientras que en la consulta 2 las dos curvas quedan casi superpuestas. Se aprecia
+también que la consulta 2 es aproximadamente un orden de magnitud más costosa que la
+consulta 1 en la carga de 100.000 filas, lo que se explica por el GROUP BY y el ORDER BY
+que debe resolver.
+
+Finalmente, en el siguiente gráfico se muestra la suma de los tiempos de ambas
+consultas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=\linewidth]{general.png}
+  \caption{Las dos consultas sumadas, por motor y por carga.}
+  \label{fig:general}
+\end{figure}
+
+Se aprecia que con 1.000 filas el mejor es MySQL, con 8{,}4 ms contra 11 ms. Al crecer
+la carga PostgreSQL pasa al frente, primero con holgura, 89 ms contra 113 ms, y después
+por muy poco, 1{,}11 s contra 1{,}16 s. El peor resultado corresponde, en las tres
+cargas, a la llamada de MySQL desde Python.
+
+En conclusión, se pueden destacar los siguientes puntos.
+
+\begin{itemize}[leftmargin=1.4em,itemsep=6pt,topsep=6pt]
+  \item En el uso exclusivo de JOIN fue superior PostgreSQL, con más del doble de
+        rapidez que MySQL en la carga de 100.000 filas.
+
+  \item En las operaciones GROUP BY y ORDER BY (consulta 2) los dos motores quedaron parejos. Por lo tanto no se podría quien fue superior.
+
+  \item Las llamadas desde Python junto con el uso de librerías especializadas no
+        resultaron óptimas, y fue preferible ejecutar un script directamente dentro del
+        SGBD. La única excepción fue la consulta 2 sobre 100.000 filas leída desde
+        PostgreSQL, donde pandas quedó por delante del motor por un margen estrecho.
+
+  \item Para la consulta de datos se mostró una ventaja general de los sistemas
+        de gestión de bases de datos frente a los scripts de Python.
+
+  \item En cuanto a la inserción, PostgreSQL fue significativamente mejor que MySQL en
+        los tres tamaños de carga.
+\end{itemize}
+
+\appendix
+
+\section{Anexo. Capturas de la ejecución de los benchmarks}
+\label{sec:anexo}
+
+Las capturas de pantalla que siguen son el respaldo de los tiempos citados en el
+trabajo. Corresponden a la ejecución del código tal como la devolvieron el cliente de
+cada motor y el intérprete de Python.
+
+\subsection{Fase II. Carga de datos}
+\label{sec:anexo-carga}
+
+\begin{figure}[H]
+  \centering
+  \captura{1.0}{carga_mysql_1k.png}
+  \caption{MySQL, carga de 1.000 filas por tabla.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{1.0}{carga_mysql_10k.png}
+  \caption{MySQL, carga de 10.000 filas por tabla.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{1.0}{carga_mysql_100k.png}
+  \caption{MySQL, carga de 100.000 filas por tabla.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{1.0}{carga_pg_1k.png}
+  \caption{PostgreSQL, carga de 1.000 filas por tabla.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{1.0}{carga_pg_10k.png}
+  \caption{PostgreSQL, carga de 10.000 filas por tabla.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{1.0}{carga_pg_100k.png}
+  \caption{PostgreSQL, carga de 100.000 filas por tabla.}
+\end{figure}
+
+\subsection{Fase III. Consultas en SQL}
+\label{sec:anexo-consultas}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.62}{c1_mysql_1k.png}
+  \caption{MySQL, consulta 1 sobre 1.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.36}{c1_mysql_10k.png}
+  \caption{MySQL, consulta 1 sobre 10.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.62}{c1_mysql_100k.png}
+  \caption{MySQL, consulta 1 sobre 100.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.62}{c2_mysql_1k.png}
+  \caption{MySQL, consulta 2 sobre 1.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.62}{c2_mysql_10k.png}
+  \caption{MySQL, consulta 2 sobre 10.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.62}{c2_mysql_100k.png}
+  \caption{MySQL, consulta 2 sobre 100.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.68}{c1_pg_1k.png}
+  \caption{PostgreSQL, consulta 1 sobre 1.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.66}{c1_pg_10k.png}
+  \caption{PostgreSQL, consulta 1 sobre 10.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.58}{c1_pg_100k.png}
+  \caption{PostgreSQL, consulta 1 sobre 100.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.48}{c2_pg_1k.png}
+  \caption{PostgreSQL, consulta 2 sobre 1.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.56}{c2_pg_10k.png}
+  \caption{PostgreSQL, consulta 2 sobre 10.000 filas.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{0.58}{c2_pg_100k.png}
+  \caption{PostgreSQL, consulta 2 sobre 100.000 filas.}
+\end{figure}
+
+\subsection{Fase IV. Ejecución desde Python}
+\label{sec:anexo-python}
+
+\begin{figure}[H]
+  \centering
+  \captura{1.0}{python_mysql.png}
+  \caption{Ejecución del script de Python contra MySQL.}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \captura{1.0}{python_pg.png}
+  \caption{Ejecución del script de Python contra PostgreSQL.}
+\end{figure}
+
+\end{document}

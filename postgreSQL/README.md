@@ -1,14 +1,5 @@
 # PostgreSQL
 
-- `esquemas.txt` — las cuatro tablas.
-- `consultas/consulta_1.sql` — pokémon de tipo fuego con su especie y su entrenador.
-- `consultas/consulta_2.sql` — pokémon de cada entrenador por categoría de objeto.
-- `carga_de_datos/carga_{1k,10k,100k}.sql` — una prueba de carga cada uno.
-- `python/consultas.py` — las mismas consultas resueltas con pandas.
-
-Cada archivo de carga crea las tablas y las carga, así que no hace falta correr
-`esquemas.txt` antes.
-
 ## Fase II: carga
 
 | Prueba | Filas por tabla | Tiempo |
