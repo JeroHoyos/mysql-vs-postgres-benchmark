@@ -1,6 +1,6 @@
-**/carga_de_datos/carga_*.sql
+**/data_loading/load_*.sql
 __pycache__/
-**/python/tiempos.csv
+**/python/times.csv
 venv/
 .venv/
 *.zip

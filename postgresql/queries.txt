@@ -1,0 +1,19 @@
+-- query 1: fire-type pokemon with their species and their trainer
+SELECT pokemon.mote,
+       especie.nombre_especie,
+       especie.puntos_de_velocidad,
+       entrenador.nombre_completo
+FROM pokemon
+JOIN especie ON pokemon.numero_de_pokedex = especie.numero_de_pokedex
+JOIN entrenador ON pokemon.id_entrenador = entrenador.id
+WHERE especie.tipo_principal = 'fuego';
+
+-- query 2: how many pokemon each trainer has per item category
+SELECT entrenador.nombre_completo,
+       tipo_de_objeto.categoria,
+       COUNT(*) AS total_pokemon
+FROM pokemon
+JOIN entrenador ON pokemon.id_entrenador = entrenador.id
+JOIN tipo_de_objeto ON pokemon.nombre_objeto = tipo_de_objeto.nombre
+GROUP BY entrenador.nombre_completo, tipo_de_objeto.categoria
+ORDER BY total_pokemon DESC, entrenador.nombre_completo;

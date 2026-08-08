@@ -1,0 +1,42 @@
+-- pokemon species
+CREATE TABLE especie (
+    numero_de_pokedex INTEGER PRIMARY KEY,
+    nombre_especie VARCHAR(60) NOT NULL,
+    puntos_de_salud INTEGER NOT NULL,
+    puntos_de_ataque INTEGER NOT NULL,
+    puntos_de_ataque_esp INTEGER NOT NULL,
+    puntos_de_defensa INTEGER NOT NULL,
+    puntos_de_defensa_esp INTEGER NOT NULL,
+    puntos_de_velocidad INTEGER NOT NULL,
+    tipo_principal VARCHAR(20) NOT NULL,
+    tipo_secundario VARCHAR(20), 
+    pre_evolucion INTEGER, 
+    FOREIGN KEY (pre_evolucion) REFERENCES especie (numero_de_pokedex)
+);
+
+-- trainers
+CREATE TABLE entrenador (
+    id SERIAL PRIMARY KEY,
+    nombre_completo VARCHAR(100) NOT NULL,
+    dinero_disponible NUMERIC(10,2) NOT NULL,
+    dia_de_nacimiento DATE NOT NULL
+);
+
+-- item types
+CREATE TABLE tipo_de_objeto (
+    nombre VARCHAR(50) PRIMARY KEY,
+    categoria VARCHAR(50) NOT NULL
+);
+
+-- pokemon
+CREATE TABLE pokemon (
+    codigo SERIAL PRIMARY KEY,
+    mote VARCHAR(60) NOT NULL,
+    fecha_de_obtencion DATE NOT NULL,
+    numero_de_pokedex INTEGER NOT NULL,
+    id_entrenador INTEGER NOT NULL,
+    nombre_objeto VARCHAR(50),
+    FOREIGN KEY (numero_de_pokedex) REFERENCES especie (numero_de_pokedex),
+    FOREIGN KEY (id_entrenador) REFERENCES entrenador (id),
+    FOREIGN KEY (nombre_objeto) REFERENCES tipo_de_objeto (nombre)
+);
